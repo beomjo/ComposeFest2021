@@ -96,7 +96,7 @@ fun Greeting(name: String) {
 fun OnboardingScreen(onClickContinue: () -> Unit) {
     Surface {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
