@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,13 +84,26 @@ fun Greeting(name: String) {
                         fontWeight = FontWeight.ExtraBold
                     )
                 )
-            }
-            OutlinedButton(
-                onClick = {
-                    isExpand = !isExpand
+                Spacer(modifier = Modifier.padding(bottom = 10.dp))
+                if (isExpand) {
+                    Text(
+                        text = ("Composem ipsum color sit lazy, " +
+                                "padding theme elit, sed do bouncy. ").repeat(4),
+                    )
                 }
-            ) {
-                Text(text = if (isExpand) "Show less" else "Show more")
+            }
+            IconButton(
+                modifier = Modifier.then(Modifier.size(24.dp)),
+                onClick = { isExpand = !isExpand }) {
+                Icon(
+                    imageVector =
+                    if (isExpand) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                    contentDescription = if (isExpand) {
+                        stringResource(id = R.string.show_less)
+                    } else {
+                        stringResource(id = R.string.show_more)
+                    }
+                )
             }
         }
     }
@@ -96,7 +113,9 @@ fun Greeting(name: String) {
 fun OnboardingScreen(onClickContinue: () -> Unit) {
     Surface {
         Column(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
