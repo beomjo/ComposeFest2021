@@ -14,20 +14,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.AlignmentLine
-import androidx.compose.ui.layout.FirstBaseline
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.*
 import coil.compose.rememberImagePainter
 import io.beomjo.codelab.layout.ui.theme.LayoutcodelabTheme
 import kotlinx.coroutines.launch
@@ -38,12 +34,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             LayoutcodelabTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    PhotographerCard()
+                    LayoutsCodelab()
                 }
             }
         }
     }
 }
+
+val topics = listOf(
+    "Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary",
+    "Design", "Fashion", "Film", "History", "Maths", "Music", "People", "Philosophy",
+    "Religion", "Social sciences", "Technology", "TV", "Writing"
+)
 
 @Composable
 fun PhotographerCard(modifier: Modifier = Modifier) {
@@ -95,16 +97,16 @@ fun LayoutsCodelab() {
     }
 }
 
-val topics = listOf(
-    "Arts & Crafts", "Beauty", "Books", "Business", "Comics", "Culinary",
-    "Design", "Fashion", "Film", "History", "Maths", "Music", "People", "Philosophy",
-    "Religion", "Social sciences", "Technology", "TV", "Writing"
-)
-
 @Composable
 fun BodyContent(modifier: Modifier = Modifier) {
-    Row(modifier = modifier.horizontalScroll(rememberScrollState())) {
-        StaggeredGrid(modifier = modifier, rows = 5) {
+    Row(
+        modifier = modifier
+            .background(color = Color.LightGray)
+            .padding(16.dp)
+            .size(200.dp)
+            .horizontalScroll(rememberScrollState())
+    ) {
+        StaggeredGrid {
             for (topic in topics) {
                 Chip(modifier = Modifier.padding(8.dp), text = topic)
             }
@@ -284,6 +286,39 @@ fun Chip(modifier: Modifier = Modifier, text: String) {
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(text = text)
+        }
+    }
+}
+
+@Stable
+fun Modifier.padding(all: Dp) = this.then(
+    PaddingModifier(start = all, top = all, end = all, bottom = all, rtlAware = true)
+)
+
+private class PaddingModifier(
+    val start: Dp,
+    val top: Dp,
+    val end: Dp,
+    val bottom: Dp,
+    val rtlAware: Boolean,
+) : LayoutModifier {
+    override fun MeasureScope.measure(
+        measurable: Measurable,
+        constraints: Constraints
+    ): MeasureResult {
+        val horizontal = start.roundToPx() + end.roundToPx()
+        val vertical = top.roundToPx() + bottom.roundToPx()
+
+        val placeable = measurable.measure(constraints.offset(-horizontal, -vertical))
+        val width = constraints.constrainWidth(placeable.width + horizontal)
+        val height = constraints.constrainWidth(placeable.height + vertical)
+
+        return layout(width, height) {
+            if (rtlAware) {
+                placeable.placeRelative(start.roundToPx(), top.roundToPx())
+            } else {
+                placeable.place(start.roundToPx(), top.roundToPx())
+            }
         }
     }
 }
