@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -65,10 +67,47 @@ fun PhotographerCard(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+fun LayoutsCodelab() {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("LayoutsCodelab")
+                },
+                actions = {
+                    IconButton(onClick = {}) {
+                        Icon(imageVector = Icons.Filled.Favorite, contentDescription = null)
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        BodyContent(Modifier.padding(innerPadding))
+    }
+}
+
+@Composable
+fun BodyContent(modifier: Modifier = Modifier) {
+    Column(modifier.padding(8.dp)) {
+        Text("Hi there!")
+        Text("Thanks for going though the Layouts codelab")
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun PhotographerCardPreview() {
     LayoutcodelabTheme {
         PhotographerCard()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LayoutsCodelabPreview() {
+    LayoutcodelabTheme {
+        LayoutsCodelab()
     }
 }
