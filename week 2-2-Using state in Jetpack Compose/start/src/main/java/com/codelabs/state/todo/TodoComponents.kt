@@ -48,6 +48,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -240,13 +241,22 @@ fun TodoEditButton(
     enabled: Boolean = true
 ) {
     TextButton(
+        modifier = modifier,
         onClick = onClick,
         shape = CircleShape,
         enabled = enabled,
-        modifier = modifier
     ) {
         Text(text)
     }
+}
+
+@Composable
+fun TodoInputTextField(
+    modifier: Modifier = Modifier,
+    text: String,
+    setText: (String) -> Unit
+) {
+    TodoInputText(text = text, onTextChange = setText, modifier = modifier)
 }
 
 @Preview
