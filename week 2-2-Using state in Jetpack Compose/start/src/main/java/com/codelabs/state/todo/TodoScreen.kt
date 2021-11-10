@@ -49,7 +49,7 @@ fun TodoScreen(
     onRemoveItem: (TodoItem) -> Unit
 ) {
     Column {
-        TodoItemInput(onItemComplete = { onAddItem(it) })
+        TodoItemEntryInput(onItemComplete = { onAddItem(it) })
         LazyColumn(
             modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(top = 8.dp)
@@ -108,15 +108,28 @@ private fun randomTint(): Float {
 }
 
 @Composable
-fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
+fun TodoItemEntryInput(onItemComplete: (TodoItem) -> Unit) {
     val (text, setText) = remember { mutableStateOf("") }
     val (icon, setIcon) = remember { mutableStateOf(TodoIcon.Default) }
     val iconVisible = text.isBlank()
     val submit = submit@{
         if (text.isEmpty()) return@submit
         onItemComplete(TodoItem(text, icon))
+        setIcon(TodoIcon.Default)
         setText("")
     }
+    TodoItemInput(text, setText, submit, iconVisible, icon, setIcon)
+}
+
+@Composable
+fun TodoItemInput(
+    text: String,
+    onTextChange: (String) -> Unit,
+    submit: () -> Unit,
+    iconVisible: Boolean,
+    icon: TodoIcon,
+    onIconChange: (TodoIcon) -> Unit
+) {
     Column {
         Row(
             Modifier
@@ -128,7 +141,7 @@ fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
                     .weight(1f)
                     .padding(end = 8.dp),
                 text = text,
-                setText = setText,
+                setText = onTextChange,
                 onImeAction = submit
             )
             TodoEditButton(
@@ -140,7 +153,7 @@ fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
         if (iconVisible) {
             AnimatedIconRow(
                 icon = icon,
-                onIconChange = setIcon,
+                onIconChange = onIconChange,
                 modifier = Modifier.padding(top = 8.dp)
             )
         } else {
@@ -171,5 +184,5 @@ fun PreviewTodoRow() {
 @Preview
 @Composable
 fun PreviewTodoItemInput() {
-    TodoItemInput(onItemComplete = {})
+    TodoItemEntryInput(onItemComplete = {})
 }
