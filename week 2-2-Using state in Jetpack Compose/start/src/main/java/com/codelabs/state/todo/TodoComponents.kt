@@ -240,13 +240,28 @@ fun TodoEditButton(
     enabled: Boolean = true
 ) {
     TextButton(
+        modifier = modifier,
         onClick = onClick,
         shape = CircleShape,
         enabled = enabled,
-        modifier = modifier
     ) {
         Text(text)
     }
+}
+
+@Composable
+fun TodoInputTextField(
+    modifier: Modifier = Modifier,
+    text: String,
+    onTextChange: (String) -> Unit,
+    onImeAction: () -> Unit
+) {
+    TodoInputText(
+        modifier = modifier,
+        text = text,
+        onTextChange = onTextChange,
+        onImeAction = onImeAction
+    )
 }
 
 @Preview
