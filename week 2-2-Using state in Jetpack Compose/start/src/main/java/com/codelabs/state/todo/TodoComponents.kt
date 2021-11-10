@@ -254,9 +254,15 @@ fun TodoEditButton(
 fun TodoInputTextField(
     modifier: Modifier = Modifier,
     text: String,
-    setText: (String) -> Unit
+    setText: (String) -> Unit,
+    onImeAction: () -> Unit
 ) {
-    TodoInputText(text = text, onTextChange = setText, modifier = modifier)
+    TodoInputText(
+        modifier = modifier,
+        text = text,
+        onTextChange = setText,
+        onImeAction = onImeAction
+    )
 }
 
 @Preview

@@ -17,12 +17,7 @@
 package com.codelabs.state.todo
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
@@ -115,6 +110,13 @@ private fun randomTint(): Float {
 @Composable
 fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
     val (text, setText) = remember { mutableStateOf("") }
+    val (icon, setIcon) = remember { mutableStateOf(TodoIcon.Default) }
+    val iconVisible = text.isBlank()
+    val submit = submit@{
+        if (text.isEmpty()) return@submit
+        onItemComplete(TodoItem(text, icon))
+        setText("")
+    }
     Column {
         Row(
             Modifier
@@ -126,18 +128,24 @@ fun TodoItemInput(onItemComplete: (TodoItem) -> Unit) {
                     .weight(1f)
                     .padding(end = 8.dp),
                 text = text,
-                setText = setText
+                setText = setText,
+                onImeAction = submit
             )
             TodoEditButton(
-                onClick = {
-                    onItemComplete(TodoItem(text))
-                    setText("")
-                },
+                onClick = submit,
                 text = "Add",
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
-
+        if (iconVisible) {
+            AnimatedIconRow(
+                icon = icon,
+                onIconChange = setIcon,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        } else {
+            Spacer(modifier = Modifier.padding(top = 8.dp))
+        }
     }
 }
 
