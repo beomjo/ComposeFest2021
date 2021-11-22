@@ -88,6 +88,9 @@ fun RallyApp() {
                         }
                     )
                 }
+                composable(RallyScreen.Accounts.name) {
+                    AccountsBody(UserData.accounts)
+                }
                 composable(
                     route = "${accountsName}/{name}",
                     arguments = listOf(
